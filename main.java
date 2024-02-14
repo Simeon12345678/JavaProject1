@@ -3,12 +3,13 @@ import java.util.Random;
 
 class Main {
 
-    static int playerHP;
+    static int playerHP = 50;
     static int playerATK;
     static int playerSpecial;
     static int playerGuard;
     static String[] weapons = {"Sword", "Axe", "Bow"};
     static int[] enemies = {1, 2, 3, 4, 5}; // 1: slime, 2: zombie, 3: knight, 4: monster 5: wraith
+    static String[] enemiesStr = {"slime", "zombie", "knight", "monster", "wraith"};
     static String currentWeapon;
     static int currentEnemy;
 
@@ -34,9 +35,11 @@ class Main {
             System.out.print("Input:");
             ans = keyboard.nextLine();
 
+            // sword stats
             if (ans.equals("1")) {
                     System.out.println("You have selected the sword");
                     currentWeapon = weapons[0];
+                    // set stats
                     playerATK = 20;
                     playerSpecial = 50;
                     playerGuard = 30;
@@ -48,6 +51,7 @@ class Main {
                     } else {
                         windowShouldClose = true;
                     }
+            // axe stats
             } else if (ans.equals("2")) {
                     System.out.println("You have selected the axe");
                     currentWeapon = weapons[1];
@@ -62,6 +66,7 @@ class Main {
                     } else {
                         windowShouldClose = true;
                     }
+            // bow stats
             } else if (ans.equals("3")) {
                     System.out.println("You have selected the bow");
                     currentWeapon = weapons[2];
@@ -80,7 +85,7 @@ class Main {
                 System.err.println("Invalid Input!");
             }
 
-        }
+        } // end loop
     }
 
     windowShouldClose = false;
@@ -90,12 +95,14 @@ class Main {
     System.out.print("Press X to check or any other key to continue:");
     ans = keyboard.nextLine();
     
+    // displays the weapons stats
     if (ans.equalsIgnoreCase("x")) {
         displayWeaponStat(currentWeapon);
         System.out.println("\n\n\n");
         ans = keyboard.nextLine();
     }
     
+    // render loop
     while (!windowShouldClose) {
         shuffle(enemies);
         currentEnemy = enemies[0];
@@ -134,33 +141,47 @@ class Main {
                 System.err.println("what");
                 break;
         }
-        System.out.println("\n\n");
+        // sorts the shuffled array back to display the enemy list
+        insertionSort(enemies);
+
+        System.out.println("Here is a list of all the enemies");
+        for (int i = 0; i < enemies.length; i++) {
+            System.out.println(enemies[i] + " : " + enemiesStr[i]);
+        }
+        System.out.println("\n");
         System.out.println("Press any key to proceed");
         System.out.print(":");
         ans = keyboard.nextLine();
         windowShouldClose = true;
-    }
+    } // end loop
 
         windowShouldClose = false;
+
+        System.out.println("Let's see if you get a bonus turn");
 
         Random rand = new Random();
         int turn = rand.nextInt(2);
         if (turn == 1) {
-            System.out.println("you go first");
+            System.out.println("Bonus success!");
             attackMenuPlayer(currentWeapon, playerATK, playerSpecial, playerGuard, enemyHP, playerHP);
         } else {
-            System.out.println(currentEnemy + "goes first");
+            System.out.println("Bonus failed " + enemiesStr[currentEnemy] + "goes first instead");
             attackMenuEnemy(enemyATK, enemyGuard, enemyHP, playerHP);
         }
         int counter = 0;
-
+        // game loop
         while (!windowShouldClose) {
-            attackMenuPlayer(currentWeapon, playerATK, playerSpecial, playerGuard, enemyHP, playerHP);
-
-            attackMenuEnemy(enemyATK, enemyGuard, enemyHP, playerHP);
-
             counter++;
             System.out.println("Turn " + counter);
+            attackMenuPlayer(currentWeapon, playerATK, playerSpecial, playerGuard, enemyHP, playerHP); // player
+            System.out.print("continue: ");
+            ans = keyboard.nextLine(); 
+            attackMenuEnemy(enemyATK, enemyGuard, enemyHP, playerHP); // enemy
+            System.out.print("continue: ");
+            ans = keyboard.nextLine();
+
+            System.out.println("You have " + playerHP + "hitpoints remaining\n");
+            System.out.println("The enemy has " + enemyHP + "hitpoints remaining");
 
             if (playerHP <= 0) {
                 System.out.println("You lose!");
@@ -172,7 +193,7 @@ class Main {
                 continue;
             }
 
-        }
+        } // end loop
 
         keyboard.close();
     }
@@ -182,44 +203,35 @@ class Main {
         Random rand = new Random();
         int choice = rand.nextInt(2);
 
-        switch (choice) {
-            case 1:
-                System.out.println("Enemy attacks you! You take " + enemyATK + " damage from the attack");
-                break;
-            case 2:
-                System.out.println("Enemy guards, they gain " + enemyGuard + " HP!");
-                break;
-            default:
-                break;
+        if (choice == 1) {
+            System.out.println("Enemy attacks you! You take " + enemyATK + " damage from the attack");
+        } else {
+            System.out.println("Enemy guards, they gain " + enemyGuard + " HP!");
         }
         System.out.println("\n");
     }
     
     static void attackMenuPlayer(String currentWeapon, int playerATK, int playerSpecial, int playerGuard, int enemyHP, int playerHP) {
-        Scanner tempAns = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
         System.out.println("Combat Options");
         System.out.println("Attack: 1");
         System.out.println("Special: 2");
         System.out.println("Guard: 3");
         System.out.print("select: ");
-        String ans = tempAns.nextLine();
-        
-        switch (ans) {
-            case "1":
-                System.out.println("you attack with " + currentWeapon + " and you deal " + playerATK + " damage!");
-                enemyHP -= playerATK;
-                break;
-            case "2":
-                System.out.println("you use a special attack with " + currentWeapon + " and you deal " + playerSpecial + " damage!");
-                enemyHP -= playerSpecial;
-                break;
-            case "3":
-                System.out.println("you use " + currentWeapon + " to guard! Gained " + playerGuard + " amount of extra HP");
-                playerHP += playerGuard;
-            default:
-                break;
+        String ans = keyboard.nextLine();
+
+        if (ans.equalsIgnoreCase("1")) {
+            System.out.println("you attack with " + currentWeapon + " and you deal " + playerATK + " damage!");
+            enemyHP -= playerATK;
+        } else if (ans.equalsIgnoreCase("2")) {
+            System.out.println("you use a special attack with " + currentWeapon + " and you deal " + playerSpecial + " damage!");
+            enemyHP -= playerSpecial;
+        } else if (ans.equalsIgnoreCase("3")){
+            System.out.println("you use " + currentWeapon + " to guard! Gained " + playerGuard + " amount of extra HP");
+            playerHP += playerGuard;
+        } else {
+            System.err.println("ERRROR EXCEPTION");
         }
-        tempAns.close();
         System.out.println("\n");
     }
 
@@ -262,6 +274,7 @@ class Main {
             int temp = arr[i];
             int j = i - 1;
             while (j >= 0 && temp <= arr[j]) {
+                // swap
                 arr[j + 1] = arr[j];
                 j -= 1;
             }
