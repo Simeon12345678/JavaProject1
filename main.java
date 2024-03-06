@@ -1,29 +1,46 @@
 import java.util.Scanner;
 import java.util.Random;
 
-class Main {
+/*
+ * @Author Simeon Milic
+ * @version 1.2
+ * @since 2024
+ * this is a basic CLI turn-based fighting game. The player selects a weapon to use with various stats
+ * Enemies are chosen by random for the player to fight by shuffling their index in an array.
+ * Combat is simple turn based action where the goal is to get the enemies hp to 0 to win,
+ * if your hp is lowered to 0 however you will lose the match, various actions exist to perform.
+ * Such as attacking or guarding.
+ */
 
+class Main {
+    // basic player stats, all but the player hp are assigned later depending on weapon
     static int playerHP = 50;
+
     static int playerATK;
     static int playerSpecial;
     static int playerGuard;
+
     static String[] weapons = {"Sword", "Axe", "Bow"};
+
     static int[] enemies = {1, 2, 3, 4, 5}; // 1: slime, 2: zombie, 3: knight, 4: monster 5: wraith
     static String[] enemiesStr = {"slime", "zombie", "knight", "monster", "wraith"};
-    static String currentWeapon;
-    static int currentEnemy;
 
+    static String currentWeapon; // assigned to weapon chosen
+    static int currentEnemy; // assigned to random enemy
+
+    // basic enemy stats, values assigned depending on randomly chosen enemy
     static int enemyHP;
     static int enemyATK;
     static int enemyGuard;
 
+    // this variable is used for the various render loops in the game. When conditions are met it is set to true to close the loop.
     static boolean windowShouldClose = false;
 
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Welcome to game");
         System.out.print("Press X to start: ");
-        String ans = keyboard.nextLine();
+        String ans = keyboard.nextLine(); // the variable used for all Scanner inputs in the program
         if (ans.equalsIgnoreCase("x")) {
         // render loop
         while (!windowShouldClose) {
@@ -46,6 +63,7 @@ class Main {
                     System.out.println("Do you want to switch? Press X to switch if not press any key.");
                     System.out.print("Input:");
                     ans = keyboard.nextLine();
+                    // closes the loop if condition is met
                     if (ans.equalsIgnoreCase("x")) {
                         continue;
                     } else {
@@ -55,12 +73,14 @@ class Main {
             } else if (ans.equals("2")) {
                     System.out.println("You have selected the axe");
                     currentWeapon = weapons[1];
+                    // set stats
                     playerATK = 30;
                     playerSpecial = 40;
                     playerGuard = 20;
                     System.out.println("Do you want to switch? Press X to switch if not press any key.");
                     System.out.print("Input:");
                     ans = keyboard.nextLine();
+                    // closes the loop if condition is met
                     if (ans.equalsIgnoreCase("x")) {
                         continue;
                     } else {
@@ -70,12 +90,14 @@ class Main {
             } else if (ans.equals("3")) {
                     System.out.println("You have selected the bow");
                     currentWeapon = weapons[2];
+                    // set stats
                     playerATK = 20;
                     playerSpecial = 70;
                     playerGuard = 10;
                     System.out.println("Do you want to switch? Press X to switch if not press any key.");
                     System.out.print("Input:");
                     ans = keyboard.nextLine();
+                    // closes the loop if condition is met
                     if (ans.equalsIgnoreCase("x")) {
                         continue;
                     } else {
@@ -88,7 +110,7 @@ class Main {
         } // end loop
     }
 
-    windowShouldClose = false;
+    windowShouldClose = false; // reset to be used again
 
     System.out.println("\n\n\n\n\n\n");
     System.out.println("Do you wish to check the weapon stats?");
@@ -155,7 +177,7 @@ class Main {
         windowShouldClose = true;
     } // end loop
 
-        windowShouldClose = false;
+        windowShouldClose = false; // reset to be used again
 
         System.out.println("Let's see if you get a bonus turn");
 
@@ -198,6 +220,14 @@ class Main {
         keyboard.close();
     }
 
+    /*
+     * Function which dicates enemy choices, takes in various parameters required for action, unlike the player all choices are random
+     * and it lacks a special option to use.
+     * @param enemyATK the damage the enemy deals
+     * @param enemyGuard the hp the enemy will regain from guarding
+     * @param enemyHP the hitpoints the current enemy has
+     * @param playerHP the hitpoints the player currently has
+     */
     static void attackMenuEnemy(int enemyATK, int enemyGuard, int enemyHP, int playerHP) {
         System.out.println("Enemy attacks!\n");
         Random rand = new Random();
@@ -211,6 +241,16 @@ class Main {
         System.out.println("\n");
     }
     
+    /*
+     * Function which dictates plater choice, almost all basic stats regarding the enemy and player are taken as parameters for the function
+     * Choices are made using a Scanner to recieve input, depending on the String inputed various actions are performed.
+     * @param currentWeapon the weapon the player has chosen
+     * @param playerATK the damage the player deals
+     * @param playerSpecial the special attack the player has
+     * @param playerGuard the hp the player will regain from guarding
+     * @param enemyHP the hitpoints the current enemy has
+     * @param playerHP the hitpoints the player currently has
+     */
     static void attackMenuPlayer(String currentWeapon, int playerATK, int playerSpecial, int playerGuard, int enemyHP, int playerHP) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Combat Options");
@@ -234,7 +274,10 @@ class Main {
         }
         System.out.println("\n");
     }
-
+    /*
+     * takes in the current weapon which the player has chosen and prints the corrosponding stats of the weapon
+     * @param currentWeapon the weapon the player has chosen
+     */
     static void displayWeaponStat(String currentWeapon) {
         if (currentWeapon == weapons[0]) {
             System.out.println("Sword");
@@ -255,6 +298,10 @@ class Main {
     }
 
     // shuffle the enemy array
+    /*
+     * @param arr The array to be shuffled
+     * @return arr The newly shuffled array
+     */
     static int[] shuffle(int[] arr) {
         Random rand = new Random();
         for (int i = 0; i < arr.length; i++) {
@@ -268,7 +315,12 @@ class Main {
         }
         return arr;
     }
+
     // sorts the enemies
+    /*
+     * @param arr The array to be sorted
+     * @return arr The newly sorted array
+     */
     static int[] insertionSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             int temp = arr[i];
