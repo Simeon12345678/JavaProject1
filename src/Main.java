@@ -1,8 +1,9 @@
+package src;
 import java.util.Scanner;
 import java.util.Random;
 
-/*
- * @Author Simeon Milic
+/**
+ * @ajavauthor Simeon Milic
  * @version 1.2
  * @since 2024
  * this is a basic CLI turn-based fighting game. The player selects a weapon to use with various stats
@@ -12,7 +13,7 @@ import java.util.Random;
  * Such as attacking or guarding.
  */
 
-class Main {
+public class Main {
     // basic player stats, all but the player hp are assigned later depending on weapon
     static int playerHP = 50;
 
@@ -220,15 +221,15 @@ class Main {
         keyboard.close();
     }
 
-    /*
+    /**
      * Function which dicates enemy choices, takes in various parameters required for action, unlike the player all choices are random
      * and it lacks a special option to use.
-     * @param enemyATK the damage the enemy deals
-     * @param enemyGuard the hp the enemy will regain from guarding
-     * @param enemyHP the hitpoints the current enemy has
-     * @param playerHP the hitpoints the player currently has
+     * @param enemyATK the damage the enemy deals.
+     * @param enemyGuard the hp the enemy will regain from guarding.
+     * @param enemyHP the hitpoints the current enemy has.
+     * @param playerHP the hitpoints the player currently has.
      */
-    static void attackMenuEnemy(int enemyATK, int enemyGuard, int enemyHP, int playerHP) {
+    public static void attackMenuEnemy(int enemyATK, int enemyGuard, int enemyHP, int playerHP) {
         System.out.println("Enemy attacks!\n");
         Random rand = new Random();
         int choice = rand.nextInt(2);
@@ -241,7 +242,7 @@ class Main {
         System.out.println("\n");
     }
     
-    /*
+    /**
      * Function which dictates plater choice, almost all basic stats regarding the enemy and player are taken as parameters for the function
      * Choices are made using a Scanner to recieve input, depending on the String inputed various actions are performed.
      * @param currentWeapon the weapon the player has chosen
@@ -251,7 +252,7 @@ class Main {
      * @param enemyHP the hitpoints the current enemy has
      * @param playerHP the hitpoints the player currently has
      */
-    static void attackMenuPlayer(String currentWeapon, int playerATK, int playerSpecial, int playerGuard, int enemyHP, int playerHP) {
+    public static void attackMenuPlayer(String currentWeapon, int playerATK, int playerSpecial, int playerGuard, int enemyHP, int playerHP) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Combat Options");
         System.out.println("Attack: 1");
@@ -274,11 +275,11 @@ class Main {
         }
         System.out.println("\n");
     }
-    /*
+    /**
      * takes in the current weapon which the player has chosen and prints the corrosponding stats of the weapon
-     * @param currentWeapon the weapon the player has chosen
+     * @param currentWeapon the weapon the player has chosen.
      */
-    static void displayWeaponStat(String currentWeapon) {
+    public static void displayWeaponStat(String currentWeapon) {
         if (currentWeapon == weapons[0]) {
             System.out.println("Sword");
             System.out.println("Attack: 20dmg");
@@ -298,11 +299,11 @@ class Main {
     }
 
     // shuffle the enemy array
-    /*
-     * @param arr The array to be shuffled
-     * @return arr The newly shuffled array
+    /**
+     * @param arr The array to be shuffled.
+     * @return arr The newly shuffled array.
      */
-    static int[] shuffle(int[] arr) {
+    public static int[] shuffle(int[] arr) {
         Random rand = new Random();
         for (int i = 0; i < arr.length; i++) {
             // random index
@@ -317,11 +318,11 @@ class Main {
     }
 
     // sorts the enemies
-    /*
+    /**
      * @param arr The array to be sorted
      * @return arr The newly sorted array
      */
-    static int[] insertionSort(int[] arr) {
+    public static int[] insertionSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             int temp = arr[i];
             int j = i - 1;
